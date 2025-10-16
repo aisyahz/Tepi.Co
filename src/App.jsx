@@ -74,6 +74,35 @@ export default function App() {
   const updateQty = (id, delta) => {
     setCart((prev) => ({ ...prev, [id]: Math.max(0, prev[id] + delta) }));
   };
+const handleWhatsAppOrder = () => {
+  if (totalItems < 3) {
+    alert("⚠️ Minimum 3 items required to order!");
+    return;
+  }
+
+  const number = "60136648159"; 
+
+  const orderItems = MENU.filter((m) => cart[m.id] > 0)
+    .map((m) => `• ${m.name} x${cart[m.id]} — RM${fmt(m.price * cart[m.id])}`)
+    .join("%0A");
+
+  const message = `
+🍝 *Midnight Pasta UM — Tepi.Co 💛*
+=====================
+👤 Name: ${name || "-"}
+🏫 College: ${college || "-"}
+🕙 Delivery Slot: ${slot}
+📅 Date: ${date}
+---------------------
+${orderItems || "No items selected"}
+---------------------
+💰 Total: RM${fmt(totalAmount)}
+=====================
+`;
+
+  const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
+  window.open(url, "_blank");
+};
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-b from-[#0b1020] to-[#0b0f1a] text-[#f5f7fb] font-[Inter] flex justify-center items-start relative">
@@ -199,9 +228,13 @@ export default function App() {
                 </div>
               )}
             </div>
-            <button className="bg-gradient-to-r from-[#25d366] to-[#2cd778] text-[#00190a] px-5 py-3 rounded-lg font-semibold mt-4 sm:mt-0">
-              Confirm on WhatsApp
-            </button>
+            <button
+  onClick={handleWhatsAppOrder}
+  className="bg-gradient-to-r from-[#25d366] to-[#2cd778] text-[#00190a] px-5 py-3 rounded-lg font-semibold mt-4 sm:mt-0 hover:opacity-90 transition-all"
+>
+  Confirm on WhatsApp
+</button>
+
           </div>
         </div>
 
